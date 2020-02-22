@@ -6,18 +6,22 @@ from .forms import PostForm
 # Create your views here.
 
 def index(request):
+    data = Message.objects.all()
     params = {
         'title': 'Hello',
         'message': 'ここにコメントを打ってください',
-        'form':PostForm(),
-        'data':[],
+        'data': data,
          }
-    if (request.method == 'POST'):
-        comment=request.POST['content']
-        item = Message.objects.all
-        params['data'] = [item]
-        params['form'] = PostForm(request.POST)
-    else:
-        params['data'] = Message.objects.all
-
     return render(request, 'hello/index.html', params)
+
+
+def create(request):
+    params = {
+        'form': 'PostForm()'
+    }
+    if  (request.method == 'POST'):
+        comment = request.POST['content']
+        message = Message(comment = comment)
+        message.save()
+    return render(request, 'hello/index.html', params)
+
